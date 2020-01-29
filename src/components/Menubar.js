@@ -11,10 +11,9 @@ class Menubar extends Component {
         try{
           localStorage.removeItem('dataAccount')
           this.props.history.push('/login')
+          window.location.reload();
         }catch(err){
           console.log(err);
-          
-    
         }
     }
 
@@ -24,7 +23,7 @@ class Menubar extends Component {
                 <div className='menubar'>
                 <Link to='#' className='menu-add'><FaPlusSquare size={22} /></Link><br/><br/>
                 <Link to='#' className='menu-add'><FaChartLine size={22} /></Link><br/><br/>
-                <Link to='#' onClick={(event) => {this.handlerLogout(event)}} className='menu-add'><FaSignOutAlt size={22} /></Link><br/><br/>
+                <Link onClick={(event) => {this.handlerLogout(event)}} className='menu-add'><FaSignOutAlt size={22} /></Link><br/><br/>
                 </div>
             </React.Fragment>
         )

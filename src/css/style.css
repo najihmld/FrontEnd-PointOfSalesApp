@@ -108,6 +108,17 @@ html, body {
   /* login  end*/
 
 
+  .search{
+    position: fixed;
+    top: 16px;
+    z-index: 999999;
+    left: 204px;
+    -webkit-border-radius:80px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    box-shadow: none;
+    padding-left: 16px;
+  }
 
 .wrapper {
     width: 100%;
@@ -187,11 +198,18 @@ html, body {
 .cart__product{
     background-color: #bababa;
     margin-bottom: 4px;
+    padding-bottom: 1px;
+}
+
+.checkOut{
+  background-color: #bababa;
+  margin-top: 2px;
+  padding-bottom: 4px;
 }
 
 .brand {
     clear: both;
-    margin: 0 auto;
+    margin-left: 60px;
     font-size: 20px;
     font-family: 'Pacifico', cursive;
     font-variant-caps: titling-caps;
@@ -300,13 +318,13 @@ html, body {
 
 
 
-
+/* 
 @media only screen and (min-width: 768px) {
     .brand {
         margin-left: 472px;
     }
     
-}
+} */
 
 
 

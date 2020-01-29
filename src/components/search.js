@@ -1,68 +1,48 @@
-import _ from 'lodash'
-import faker from 'faker'
-import React, { Component } from 'react'
-import { Search, Grid, Header, Segment } from 'semantic-ui-react'
+// import React, { Component } from 'react';
+// import { withRouter, Link } from 'react-router-dom';
+// import { className } from '../css/style.css'
+// import {Icon,Button, Menu, Input } from 'semantic-ui-react'
+// import axios from 'axios';
 
-const initialState = { isLoading: false, results: [], value: '' }
 
-const source = _.times(5, () => ({
-  title: faker.company.companyName(),
-  description: faker.company.catchPhrase(),
-  image: faker.internet.avatar(),
-  price: faker.finance.amount(0, 100, 2, '$'),
-}))
+// class Search extends Component {
 
-export default class SearchBar extends Component {
-  state = initialState
 
-  handleResultSelect = (e, { result }) => this.setState({ value: result.title })
+//     getSearch = async (event, values) => {
+//         event.preventDefault()
+//         if(values !== ''){
+//             await axios.get(`http://127.0.0.1:3001/products/?name=${values}`)
+//             .then(res=>{
+//                 this.setState((prevState, currentState) => {
+//                     return {
+//                         ...prevState,
+//                         dataProduct: [...res.data.data]
+//                     }
+//                 })
+//             })
+//         } else {
+//             await axios.get(`http://127.0.0.1:3001/products/`)
+//             .then(res => {
+//                 this.setState((prevState, currentState) => {
+//                     return{
+//                         ...prevState,
+//                         dataProduct:[...res.data.data]
+//                     }
+//                 })
+//             })
+//         }
+//     }
 
-  handleSearchChange = (e, { value }) => {
-    this.setState({ isLoading: true, value })
 
-    setTimeout(() => {
-      if (this.state.value.length < 1) return this.setState(initialState)
+//     render() {
+//         return(
+//             <div>
+//                   <Menu.Menu position='right'>
+//                                 <Input icon='search' placeholder='Search Menu..' onChange={(event) => this.getSearch(event, event.target.value)}/> 
+//                     </Menu.Menu>
+//             </div>
+//         )
+//     }
+// }
 
-      const re = new RegExp(_.escapeRegExp(this.state.value), 'i')
-      const isMatch = (result) => re.test(result.title)
-
-      this.setState({
-        isLoading: false,
-        results: _.filter(source, isMatch),
-      })
-    }, 300)
-  }
-
-  render() {
-    const { isLoading, value, results } = this.state
-
-    return (
-      <Grid>
-        <Grid.Column width={6}>
-          <Search
-            loading={isLoading}
-            onResultSelect={this.handleResultSelect}
-            onSearchChange={_.debounce(this.handleSearchChange, 500, {
-              leading: true,
-            })}
-            results={results}
-            value={value}
-            {...this.props}
-          />
-        </Grid.Column>
-        <Grid.Column width={10}>
-          <Segment>
-            <Header>State</Header>
-            <pre style={{ overflowX: 'auto' }}>
-              {JSON.stringify(this.state, null, 2)}
-            </pre>
-            <Header>Options</Header>
-            <pre style={{ overflowX: 'auto' }}>
-              {JSON.stringify(source, null, 2)}
-            </pre>
-          </Segment>
-        </Grid.Column>
-      </Grid>
-    )
-  }
-}
+// export default withRouter(Search)
