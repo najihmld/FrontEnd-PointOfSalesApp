@@ -69,7 +69,7 @@ export default class Login extends React.Component {
             <input type='text' placeholder='email' onChange={(event) => this.handleEmail(event)} />
             <input type='password' placeholder='password' onChange={(event) => this.handlePassword(event)} />
             <button onClick={(event) => this.handleSubmitLogin(event)} type='submit'>Login</button>
-            <p className="message">Not registered? <a href="http://127.0.0.1/register">Create an account</a></p>
+            <p className="message">Not registered? <a href="http://127.0.0.1:3000/register">Create an account</a></p>
             </form>
         </div>
         </div>

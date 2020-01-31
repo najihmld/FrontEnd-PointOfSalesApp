@@ -6,8 +6,10 @@ import Main from './pages/Main'
 import Register from './pages/Register'
 
 
+
 export default class App extends React.Component {
-  
+
+
   state = {
     isLogin: true
   }

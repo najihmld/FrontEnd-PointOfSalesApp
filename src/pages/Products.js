@@ -3,6 +3,7 @@ import axios from 'axios';
 import qs from 'qs';
 import className from '../css/style.css'
 import {Icon,Button, Menu, Input } from 'semantic-ui-react'
+import {Dropdown, DropdownButton, Item, Pagination} from 'react-bootstrap'
 
 class Order extends Component {
     componentDidMount(){
@@ -12,12 +13,25 @@ class Order extends Component {
         dataProduct: [],
         cart: [],
         order: [],
-        grandTotal: 0
+        grandTotal: 0,
+        totalItems: 0,
+        page: 1,
+        search: ''
     }
     getListOrder = () => {
-        axios.get('http://127.0.0.1:3001/products')
+        let query = []
+        if(this.state.search !== ''){
+            query.push(`name=${this.state.search}`)
+        }
+        if(this.state.page > 1){
+            query.push(`page=${this.state.page}`)
+        }
+        axios.get('http://127.0.0.1:3001/products?'+query.join('&'))
         .then(res => {
-            this.setState({dataProduct: res.data.data})  
+            this.setState({
+                dataProduct: res.data.data.items,
+                totalItems: res.data.data.totalItems
+            })  
         })
         .catch(err => {
             console.log(err);
@@ -33,7 +47,7 @@ class Order extends Component {
     deleteListCart = (event) => {
         const list = 0
         this.state.order.map((order, index) => {
-            if(order.product_id == event.target.id){ 
+            if(order.id == event.target.id){ 
             }
         })
         let cartForDelete = this.state.cart.filter((data) => {
@@ -45,7 +59,7 @@ class Order extends Component {
         this.setState({
             cart: cartForDelete,
             order: orderForDelete,
-            grandTotal: this.state.grandTotal - parseInt(list)
+            grandTotal: this.state.grandTotal - parseInt(list) || 0
         })
     }
     decreaseOrder = (event, price) => {
@@ -97,7 +111,7 @@ class Order extends Component {
             })
         }else{
             this.state.cart.map((item, index) => {
-                if(item.product_id === data.id){
+                if(item.id === data.id){
                     checkProduct.push('1')
                 }
             })
@@ -133,36 +147,112 @@ class Order extends Component {
              })
             .catch(console.log)
     }
-    getSearch = async (event, values) => {
+    sortLates = async(event, value) => {
         event.preventDefault()
-        if(values !== ''){
-            await axios.get(`http://127.0.0.1:3001/products/?name=${values}`)
-            .then(res=>{
-                this.setState((prevState, currentState) => {
-                    return {
-                        ...prevState,
-                        dataProduct: [...res.data.data]
-                    }
-                })
-            })
-        } else {
-            await axios.get(`http://127.0.0.1:3001/products/`)
+        if(value !== ''){
+            await axios.get(`http://127.0.0.1:3001/products/?sortby=id DESC`)
             .then(res => {
                 this.setState((prevState, currentState) => {
                     return{
                         ...prevState,
-                        dataProduct:[...res.data.data]
+                        dataProduct: [...res.data.data.items]
                     }
                 })
             })
-        }
+        } 
     }
+    sortHPrice = async(event, value) => {
+        event.preventDefault()
+        if(value !== ''){
+            await axios.get(`http://127.0.0.1:3001/products/?sortby=price DESC`)
+            .then(res => {
+                this.setState((prevState, currentState) => {
+                    return{
+                        ...prevState,
+                        dataProduct: [...res.data.data.items]
+                    }
+                })
+            })
+        } 
+    }
+    sortLPrice = async(event, value) => {
+        event.preventDefault()
+        if(value !== ''){
+            await axios.get(`http://127.0.0.1:3001/products/?sortby=price ASC`)
+            .then(res => {
+                this.setState((prevState, currentState) => {
+                    return{
+                        ...prevState,
+                        dataProduct: [...res.data.data.items]
+                    }
+                })
+            })
+        } 
+    }
+
+    // getSearch = async (event, values) => {
+    //     event.preventDefault()
+    //     if(values !== ''){
+    //         await axios.get(`http://127.0.0.1:3001/products/?name=${values}`)
+    //         .then(res=>{
+    //             this.setState((prevState, currentState) => {
+    //                 return {
+    //                     ...prevState,
+    //                     dataProduct: [...res.data.data.items],
+    //                     totalItems: res.data.data.totalItems
+    //                 }
+    //             })
+    //         })
+    //     } else {
+    //         await axios.get(`http://127.0.0.1:3001/products/`)
+    //         .then(res => {
+    //             this.setState((prevState, currentState) => {
+    //                 return{
+    //                     ...prevState,
+    //                     dataProduct:[...res.data.data.items],
+    //                     totalItems: res.data.data.totalItems
+    //                 }
+    //             })
+    //         })
+    //     }
+    // }
+    getSearch = async (event, values) => {
+      this.setState({
+          search: values
+      }, this.getListOrder)
+    }
+    createPage = () => {
+        let result = []
+        const totalPage = Math.ceil(this.state.totalItems/6)
+        for (let index = 1; index <= totalPage; index++){
+            result.push(index)          
+        }
+        console.log(this.state.totalItems, totalPage, result);
+        
+        return result
+    }
+    getNextPage = (page) => {
+        this.setState({
+            page: page
+        }, this.getListOrder)
+    }
+  
 
 
     render() {
+        //console.log(this.state.totalItems)
         return (
   
                 <div>  
+
+    <div className='sortby'>
+            <DropdownButton variant="light" title="Sort by">
+            <Dropdown.Item onClick={(event) => this.sortLates(event, event.target.value)}>Latest</Dropdown.Item>
+            <Dropdown.Item onClick={(event) => this.sortHPrice(event, event.target.value)}>High Pricet</Dropdown.Item>
+            <Dropdown.Item onClick={(event) => this.sortLPrice(event, event.target.value)}>Low Price</Dropdown.Item>
+            </DropdownButton></div>
+
+                    
                     <input className='search' placeholder='Search product..' onChange={(event) => this.getSearch(event, event.target.value)}/> 
                {this.state.dataProduct.map((item, index) => {
                     return(
@@ -182,6 +272,19 @@ class Order extends Component {
                     )
                 })} 
 
+                <div className='pagination__cs'>
+                {this.createPage().map((item, index) => {
+                   return(
+                    <Pagination>
+                         <Pagination.Item onClick={(event) => this.getNextPage(item)}>{item}</Pagination.Item>
+                    </Pagination>
+               
+                   )
+                })}
+                </div>
+
+               
+
             <div className='sidebar'>
              <div className='list__order'>
                 {this.state.order.map((item, index) => {
@@ -190,12 +293,12 @@ class Order extends Component {
                             <div>{item.name}</div>
                             <div>{item.price*item.qty}</div>
                                 <Button.Group size='mini'> 
-                                    <Button id={item.product_id} disabled={item.qty == 1 } onClick={(event) =>         this.decreaseOrder(event, item.price)}>
+                                    <Button id={item.product_id} disabled={item.qty == 1 } onClick={(event) =>this.decreaseOrder(event, item.price)}>
                                         <Icon name='minus' /> Min</Button>             
                                     <Button>{item.qty}</Button>
                                     <Button id={item.product_id} onClick={(event) => this.increaseOrder(event, item.price)} >
                                         <Icon name='add' /> Add</Button>       
-                                    <Button id={item.id} onClick={(event) => {this.deleteListCart(event)}}>
+                                    <Button id={item.product_id} onClick={(event) => {this.deleteListCart(event)}}>
                                         <Icon name='trash alternate outline' /> Remove
                                     </Button>
                                 </Button.Group>           

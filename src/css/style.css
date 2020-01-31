@@ -26,7 +26,7 @@ html, body {
     background: #FFFFFF;
     max-width: 360px;
     margin: 0 auto 100px;
-    padding: 45px;
+    padding-bottom: 30px;
     text-align: center;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
   }
@@ -113,11 +113,24 @@ html, body {
     top: 16px;
     z-index: 999999;
     left: 204px;
-    -webkit-border-radius:80px;
-    -moz-border-radius: 8px;
+    -webkit-appearance: none;
     border-radius: 8px;
     box-shadow: none;
     padding-left: 16px;
+    border-width: thin;
+    background-color: #ececec;
+  }
+
+  .sortby{
+      position: fixed;
+      top: 11px;
+      z-index: 999999;
+      right: 360px;
+      -webkit-appearance: none;
+      border-radius: 8px;
+      box-shadow: none;
+      border-width: thin;
+
   }
 
 .wrapper {
@@ -198,13 +211,17 @@ html, body {
 .cart__product{
     background-color: #bababa;
     margin-bottom: 4px;
-    padding-bottom: 1px;
+    padding-bottom: 0.5px;
 }
 
 .checkOut{
   background-color: #bababa;
-  margin-top: 2px;
+  margin-top: 0.5px;
   padding-bottom: 4px;
+}
+
+.checkOut button {
+  border-radius: 8px;
 }
 
 .brand {
@@ -385,11 +402,16 @@ form {
     height: 40px;
   }
   
-  input[type=number]::-webkit-inner-spin-button,
-  input[type=number]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+     -webkit-appearance: none;
+    margin: 0;
   }
 
+  /* pagination */
 
+  .pagination__cs {
+    clear: both;
+    display: flex;
+  }
 
